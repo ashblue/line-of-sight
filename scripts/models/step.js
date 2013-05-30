@@ -20,28 +20,11 @@ $(document).ready(function () {
         }
     };
 
-    jp.Step = function(xC, yC, xT, yT, totalSteps, parentStep) {
-        // herustic
-        var h = _private.distanceM(xC, yC, xT, yT);
-
-        this.x = xC;
-        this.y = yC;
-        this.g = totalSteps;
-        this.h = h;
-        this.f = totalSteps + h;
-        this.parent = parentStep;
-    };
-
     // @TODO Might need to add an extra +1 for every level change
-    jp.Step3d = function(xC, yC, zC, xT, yT, zT, totalSteps, parentStep) {
-        var h = _private.distanceM3d(xC, yC, zC, xT, yT, zT);
-
-        this.x = xC;
-        this.y = yC;
-        this.z = zC;
-        this.g = totalSteps;
-        this.h = h;
-        this.f = totalSteps + h;
-        this.parent = parentStep;
+    jp.Step = function(x, y, z, totalSteps) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.stepCount = totalSteps;
     };
 });

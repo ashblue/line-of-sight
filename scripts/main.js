@@ -5,24 +5,11 @@ $(document).ready(function () {
         $BTN_ERASE = $('#erase');
 
     var _event = {
-        findPath: function () {
-            var begin = jp.visual.getBegin(),
-                end = jp.visual.getEnd();
-
+        testVision: function () {
+            jp.visual.clearPath();
             jp.map.setData(jp.visual.getMap());
-            var path = jp.pathFinder.findPath(begin.x, begin.y, end.x, end.y);
-            jp.pathFinder.setVisual();
-            jp.visual.setTileGroup(path, 'path')
-        },
-
-        findPath3d: function () {
-            var begin = jp.visual.getBegin(),
-                end = jp.visual.getEnd();
-
-            jp.map.setData(jp.visual.getMap3d());
-            var path = jp.pathFinder.findPath3d(begin.x, begin.y, begin.z, end.x, end.y, end.z);
-            jp.pathFinder.setVisual();
-            jp.visual.setTileGroup(path, 'path')
+            jp.lineOfSight.findTarget()
+                .setVisual();
         }
     };
 
@@ -33,7 +20,7 @@ $(document).ready(function () {
         },
 
         bind: function () {
-            $BTN_PATH.click(_event.findPath3d);
+            $BTN_PATH.click(_event.testVision);
             $BTN_ERASE.click(jp.visual.erase);
         }
     };

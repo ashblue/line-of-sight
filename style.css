@@ -83,12 +83,13 @@ button.active {
     position: absolute;
     top: 0;
     left: 0;
-    line-height: 50px;
+    width: 36px;
+    line-height: 42px;
     text-align: center;
     display: block;
-    width: 47px;
     letter-spacing: -2px;
     color: #999;
+    text-indent: 1px;
 }
 
 .map-tile[data-lv="2"]:after {

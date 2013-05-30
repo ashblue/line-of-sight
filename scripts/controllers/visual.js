@@ -16,9 +16,8 @@ $(document).ready(function () {
         begin: '[data-status=begin]',
         end: '[data-status=end]',
         closed: '[data-status=closed]',
-        setOpened: '[data-status=set-opened]',
-        setClosed: '[data-status=set-closed]',
-        path: '[data-status=path]'
+        blocked: '[data-status=blocked]',
+        visible: '[data-status=visible]'
     };
 
     var _setBegin = false,
@@ -138,28 +137,6 @@ $(document).ready(function () {
         getMap: function () {
             var tmpMap = [],
                 status,
-                i,
-                j;
-
-            for (i = 0; i < MAP_HEIGHT_COUNT; i++) {
-                tmpMap.push([]);
-                for (j = 0; j < MAP_WIDTH_COUNT; j++) {
-                    status = this.getStatus(j, i);
-
-                    if (status === 'closed') {
-                        tmpMap[i][j] = 0;
-                    } else {
-                        tmpMap[i][j] = 1;
-                    }
-                }
-            }
-
-            return tmpMap;
-        },
-
-        getMap3d: function () {
-            var tmpMap = [],
-                status,
                 lv,
                 i, j, k;
 
@@ -215,13 +192,12 @@ $(document).ready(function () {
                 return;
             }
 
+            $tile.addClass('changed');
             $tile.attr('data-status', status);
 
             // If stats are present set them
-            if (tile.f) {
-                $tile.append('<span class="stat f">' + tile.f +'</span>');
-                $tile.append('<span class="stat g">' + tile.g +'</span>');
-                $tile.append('<span class="stat h">' + tile.h +'</span>');
+            if (tile.stepCount) {
+                $tile.append('<span class="stat g">' + tile.stepCount +'</span>');
             }
 
             return this;
@@ -262,8 +238,11 @@ $(document).ready(function () {
 
         // Remove opened set, closed set, and path tiles from the map
         clearPath: function () {
-            $MAP_TILES.html('');
-            $(TILES.setClosed + ', ' + TILES.setOpened + ', ' + TILES.path).attr('data-status', 'open');
+            $('tr td.changed').each(function () {
+                $(this).attr('data-status', 'open');
+                $(this).empty();
+            });
+
             return this;
         }
     };
