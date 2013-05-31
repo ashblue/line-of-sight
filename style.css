@@ -121,6 +121,15 @@ button.active {
     position: absolute;
 }
 
+
+.stat.g:nth-child(2),
+.stats-preview .g:nth-child(2) {
+    position: absolute;
+    bottom: 4px;
+    right: 5px;
+    left: inherit;
+}
+
 .stat.h,
 .stats-preview .h {
     position: absolute;

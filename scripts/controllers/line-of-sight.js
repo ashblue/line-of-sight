@@ -22,6 +22,8 @@ $(document).ready(function () {
 
         // Attempts to view the target
         findTarget: function () {
+            this.reset();
+
             var start = jp.visual.getBegin(),
                 end = jp.visual.getEnd();
 
@@ -37,18 +39,18 @@ $(document).ready(function () {
             // How many squares to advance in an increment (prevents reading corners)
             var err = deltaX - deltaY;
 
-            var x = start.x, y = start.y, errCalc;
-            for (this.step; this.step < this.maxSteps; this.step++) {
+            var x = start.x, y = start.y, valid = true, errCalc;
+            while (valid) {
                 // Check for invalid tile
                 if (jp.map.isBlocked(x, y, 0)) {
-                    console.log(jp.map.isBlocked(x, y, 0));
-                    this.addBlocked(new jp.Step(x, y, 0, this.step));
+                    this.addBlocked(new jp.Step(x, y, 0, this.step + 1));
                     break;
+                } else {
+                    this.addVisible(new jp.Step(x, y, 0, this.step + 1));
                 }
 
                 // Check for destination
                 if (x === end.x && y === end.y) {
-                    this.addVisible(new jp.Step(x, y, 0, this.step));
                     break;
                 }
 
@@ -57,13 +59,11 @@ $(document).ready(function () {
                 if (errCalc > deltaY * -1) {
                     err -= deltaY;
                     x += stepX;
-                    this.addVisible(new jp.Step(x, y, 0, this.step));
                 }
 
-                // Check for invalid tile
-                if (jp.map.isBlocked(x, y, 0)) {
-                    console.log(jp.map.isBlocked(x, y, 0));
-                    this.addBlocked(new jp.Step(x, y, 0, this.step));
+                // Check for destination
+                if (x === end.x && y === end.y) {
+                    this.addVisible(new jp.Step(x, y, 0, this.step + 1));
                     break;
                 }
 
@@ -71,8 +71,9 @@ $(document).ready(function () {
                 if (errCalc < deltaX) {
                     err += deltaX;
                     y += stepY;
-                    this.addVisible(new jp.Step(x, y, 0, this.step));
                 }
+
+                this.step++;
             }
 
             return this;
@@ -103,7 +104,7 @@ $(document).ready(function () {
         },
 
         setVisual: function () {
-            jp.visual.clearPath()
+            jp.visual
                 .setTileGroup(this.visible, 'visible')
                 .setTileGroup(this.blocked, 'blocked');
         },

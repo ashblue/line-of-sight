@@ -238,10 +238,17 @@ $(document).ready(function () {
 
         // Remove opened set, closed set, and path tiles from the map
         clearPath: function () {
-            $('tr td.changed').each(function () {
-                $(this).attr('data-status', 'open');
-                $(this).empty();
+            $(TILES.visible + ', ' + TILES.blocked).each(function () {
+                if ($(this).attr('data-status') === 'blocked') {
+                    $(this).attr('data-status', 'closed');
+                } else {
+                    $(this).attr('data-status', 'open');
+                }
+
+                $(this).removeClass('changed');
             });
+
+            $('.map-tile').empty();
 
             return this;
         }
