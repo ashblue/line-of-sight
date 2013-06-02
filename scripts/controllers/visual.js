@@ -10,7 +10,8 @@ $(document).ready(function () {
         $BTNS = $('button'),
         $BTN_START = $('#set-begin'),
         $BTN_END = $('#set-end'),
-        $BTN_LV = $('#set-lv');
+        $BTN_LV = $('#set-lv'),
+        $STATS = $('#stats');
 
     var TILES = {
         begin: '[data-status=begin]',
@@ -115,6 +116,8 @@ $(document).ready(function () {
                     return 'open';
                 case 'open':
                     return 'open';
+                case 'end':
+                    return 'open';
                 default:
                     return status;
             }
@@ -201,6 +204,15 @@ $(document).ready(function () {
             }
 
             return this;
+        },
+
+        setStats: function (stats) {
+            var output = '';
+            for (var key in stats){
+                output += '<li>' + key + ': ' + stats[key] + '</li>';
+            }
+
+            $STATS.html(output);
         },
 
         setTileGroup: function (steps, tileStatus) {
