@@ -47,35 +47,37 @@ $(document).ready(function () {
             var angleChangeRatio = this.getAngleChangeRatio(this.getMax(deltaX, deltaY) + 1, deltaZ);
             console.log('ratio change', angleChangeRatio);
 
-            var x = start.x, y = start.y, xPrev = x, yPrev = y, valid = true, errCalc, angleChangeCount = angleChangeRatio;
+            var x = start.x, y = start.y, z = start.z, xPrev = x, yPrev = y, valid = true, errCalc, angleChangeCount = angleChangeRatio;
             while (valid) {
                 console.log('step', this.step);
 
-                // Check for invalid tile
-//                if (jp.map.isBlocked(x, y, 0)) {
-//                    console.log('blocked');
-//                    this.addBlocked(new jp.Step(x, y, 0, this.step));
-//                    break;
-//                }
-
                 // Increment z if angleChange exceeds steps
                 if (angleChangeRatio && this.step + 1 > angleChangeCount) {
-                    console.log('change at', x, y);
                     angleChangeCount += angleChangeRatio;
+                    z += stepZ;
+                    console.log('change at', x, y, z);
+                }
+
+                // Check for invalid tile
+                if (jp.map.isBlocked(x, y, z) && this.step !== 0) {
+                    console.log('blocked', x, y, z);
+                    this.addBlocked(new jp.Step(x, y, z, this.step));
+                    break;
                 }
 
                 // If moving on a corner, verify one adjacent corner is valid
                 if (x !== xPrev && y !== yPrev &&
-                    jp.map.isBlocked(x - stepX, y, 0) && jp.map.isBlocked(x, y - stepY, 0)) {
-                    this.addBlocked(new jp.Step(x, y, 0, this.step));
+                    jp.map.isBlocked(x - stepX, y, z) && jp.map.isBlocked(x, y - stepY, z)) {
+                    this.addBlocked(new jp.Step(x, y, z, this.step));
+                    console.log('blocked');
                     break;
                 }
 
                 // Check for destination
-                if (x === end.x && y === end.y) { break; }
+                if (x === end.x && y === end.y && z === end.z) { break; }
 
                 // Plot step
-                this.addVisible(new jp.Step(x, y, 0, this.step));
+                this.addVisible(new jp.Step(x, y, z, this.step));
 
                 // Check error and increment x
                 xPrev = x;

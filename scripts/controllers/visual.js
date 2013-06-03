@@ -151,10 +151,10 @@ $(document).ready(function () {
                         status = this.getStatus(k, j);
                         lv = this.getLv(k, j);
 
-                        if (lv !== i + 1 || status === 'closed') {
-                            tmpMap[i][j][k] = 0;
-                        } else {
+                        if (lv <= i + 1 && status !== 'closed') {
                             tmpMap[i][j][k] = 1;
+                        } else {
+                            tmpMap[i][j][k] = 0;
                         }
                     }
                 }
